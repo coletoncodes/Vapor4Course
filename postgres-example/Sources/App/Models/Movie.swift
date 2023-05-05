@@ -1,15 +1,25 @@
+//
+//  Movie.swift
+//  
+//
+//  Created by Coleton Gorecke on 5/4/23.
+//
+
 import Fluent
 import Vapor
 
-final class Todo: Model, Content {
-    static let schema = "todos"
+final class Movie: Model, Content {
+    // Table name
+    static let schema = "movies"
     
+    // Primary key
     @ID(key: .id)
     var id: UUID?
 
+    // Matches title column in database
     @Field(key: "title")
     var title: String
-
+    
     init() { }
 
     init(id: UUID? = nil, title: String) {
@@ -17,3 +27,4 @@ final class Todo: Model, Content {
         self.title = title
     }
 }
+

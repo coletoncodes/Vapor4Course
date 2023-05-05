@@ -2,13 +2,14 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async in
-        "It works!"
+    
+    // movies POST
+    app.post("movies") { req -> EventLoopFuture<Movie> in
+        // Decode movie
+        // Content = body of HTTP request
+        let movie = try req.content.decode(Movie.self)
+        // After creating in database, return the Model.
+        // This is optional, you could return .ok or whatever else you wanted. 
+        return movie.create(on: req.db).map { movie }
     }
-
-    app.get("hello") { req async -> String in
-        "Hello, world!"
-    }
-
-    try app.register(collection: TodoController())
 }
