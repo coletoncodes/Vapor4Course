@@ -49,20 +49,14 @@ func routes(_ app: Application) throws {
     // MARK: - Delete
     // /movie/:movie_id
     app.delete("movie", ":movie_id") { req async throws -> HTTPStatus in
-        // Extract the movie_id parameter from the request
-        guard let movieID = req.parameters.get("movie_id", as: UUID.self) else {
-            throw Abort(.badRequest, reason: "Invalid or missing movie_id")
+        guard let movieToDelete = try await Movie.find(req.parameters.get("movie_id"), on: req.db) else {
+            throw Abort(.notFound, reason: "Unable to find Movie. Invalid or missing movie_id")
         }
-
-        // Find the movie using the provided movie_id
-        if let movieToDelete = try await Movie.find(movieID, on: req.db) {
-            // Delete the movie from the database
-            try await movieToDelete.delete(on: req.db)
-            req.logger.info("Successfully deleted movie")
-            return .ok
-        } else {
-            throw Abort(.notFound, reason: "Movie not found")
-        }
+        
+        // Delete the movie from the database
+        try await movieToDelete.delete(on: req.db)
+        req.logger.info("Successfully deleted movie")
+        return .ok
     }
 
 }
