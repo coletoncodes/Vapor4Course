@@ -3,6 +3,7 @@ import Vapor
 
 func routes(_ app: Application) throws {
     
+    // MARK: - GET
     // /movies
     app.get("movies") { req async throws -> [Movie] in
         try await Movie.query(on: req.db).all()
@@ -17,8 +18,9 @@ func routes(_ app: Application) throws {
         return movie
     }
     
-    // /movies POST
-    app.post("movies") { req -> Movie in
+    // MARK: - POST
+    // /movies
+    app.post("movies") { req async throws -> Movie in
         // Decode movie
         // Content = body of HTTP request
         let movie = try req.content.decode(Movie.self)
@@ -27,4 +29,40 @@ func routes(_ app: Application) throws {
         try await movie.create(on: req.db)
         return movie
     }
+    
+    // MARK: - PUT
+    // /movies
+    app.put("movies") { req async throws -> HTTPStatus in
+        let movieBody = try req.content.decode(Movie.self)
+        
+        if let existingMovie = try await Movie.find(movieBody.id, on: req.db) {
+            existingMovie.id = movieBody.id
+            existingMovie.title = movieBody.title
+            try await existingMovie.update(on: req.db)
+            req.logger.info("Successfully updated movie")
+            return .ok
+        } else {
+            throw Abort(.notFound, reason: "Invalid or missing movie_id")
+        }
+    }
+    
+    // MARK: - Delete
+    // /movie/:movie_id
+    app.delete("movie", ":movie_id") { req async throws -> HTTPStatus in
+        // Extract the movie_id parameter from the request
+        guard let movieID = req.parameters.get("movie_id", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid or missing movie_id")
+        }
+
+        // Find the movie using the provided movie_id
+        if let movieToDelete = try await Movie.find(movieID, on: req.db) {
+            // Delete the movie from the database
+            try await movieToDelete.delete(on: req.db)
+            req.logger.info("Successfully deleted movie")
+            return .ok
+        } else {
+            throw Abort(.notFound, reason: "Movie not found")
+        }
+    }
+
 }
