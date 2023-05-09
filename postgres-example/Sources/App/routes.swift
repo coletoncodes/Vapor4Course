@@ -6,7 +6,8 @@ func routes(_ app: Application) throws {
     // MARK: - GET
     // /movies
     app.get("movies") { req async throws -> [Movie] in
-        try await Movie.query(on: req.db).all()
+        try await Movie.query(on: req.db)
+            .with(\.$reviews).all()
     }
     
     // /movie/id
@@ -58,5 +59,22 @@ func routes(_ app: Application) throws {
         req.logger.info("Successfully deleted movie")
         return .ok
     }
-
+    
+    // MARK: - Reviews
+    // /reviews
+    app.post("reviews") { req async throws -> HTTPStatus in
+        let review = try req.content.decode(Review.self)
+        try await review.create(on: req.db)
+        req.logger.info("Successfully added review to movie")
+        return .ok
+    }
+    
+    // MARK: - Actors
+    // /actors
+    app.post("actors") { req async throws -> HTTPStatus in
+        let actor = try req.content.decode(Actor.self)
+        try await actor.create(on: req.db)
+        req.logger.info("Successfully created actor")
+        return .ok
+    }
 }
