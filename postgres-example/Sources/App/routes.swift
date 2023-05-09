@@ -77,4 +77,32 @@ func routes(_ app: Application) throws {
         req.logger.info("Successfully created actor")
         return .ok
     }
+    
+    /// GET
+    // /actors
+    app.get("actors") { req async throws -> [Actor] in
+        try await Actor.query(on: req.db)
+            .all()
+    }
+    
+    // MARK: - MovieActor
+    // /movie/:movie_id/actor/:actor_id
+    app.post("movie", ":movie_id", "actor", ":actor_id") { req async throws -> HTTPStatus in
+        guard let movieID = req.parameters.get("movie_id", as: UUID.self), let actorID = req.parameters.get("actor_id", as: UUID.self) else {
+            throw Abort(.badRequest)
+        }
+        
+        // get the movie
+        guard let movie = try await Movie.find(movieID, on: req.db) else {
+            throw Abort(.notFound, reason: "A Movie with the id: \(movieID) does not exist")
+        }
+        
+        guard let actor = try await Actor.find(actorID, on: req.db) else {
+            throw Abort(.notFound, reason: "An actor with the id: \(actorID) does not exist")
+        }
+        
+        try await movie.$actors.attach(actor, on: req.db)
+        
+        return .ok
+    }
 }

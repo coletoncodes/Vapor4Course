@@ -5,12 +5,13 @@ import Vapor
 // configures your application
 public func configure(_ app: Application) async throws {
     
+    // Setup Database
     app.databases.use(
         .postgres(
             hostname: "localhost",
-            username: "postgres",
+            username: "coletongorecke",
             password: "",
-            database: "moviesdb"
+            database: "postgres"
         ),
         as: .psql
     )
@@ -19,6 +20,7 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateReview(), to: .psql)
     app.migrations.add(CreateActor(), to: .psql)
     app.migrations.add(CreateMovieActor(), to: .psql)
+    
     
     // register routes
     try routes(app)
