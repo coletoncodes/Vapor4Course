@@ -9,20 +9,28 @@ import Fluent
 import Vapor
 
 final class Movie: Model, Content {
-    // Table name
+    // MARK: - Table name
     static let schema = "movies"
     
-    // Primary key
+    // MARK: - Primary key
     @ID(key: .id)
     var id: UUID?
 
-    // Matches title column in database
+    // MARK: - Properties
     @Field(key: "title")
     var title: String
     
+    @Children(for: \.$movie)
+    var reviews: [Review]
+    
+    // MARK: - Initializers
+    
     init() { }
 
-    init(id: UUID? = nil, title: String) {
+    init(
+        id: UUID? = nil,
+        title: String
+    ) {
         self.id = id
         self.title = title
     }

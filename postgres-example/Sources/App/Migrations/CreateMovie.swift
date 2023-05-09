@@ -24,5 +24,4 @@ struct CreateMovie: AsyncMigration {
         // Drop the table
         try await database.schema("movies").delete()
     }
-    
 }
