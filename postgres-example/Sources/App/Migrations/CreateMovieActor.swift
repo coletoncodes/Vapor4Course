@@ -1,5 +1,5 @@
 //
-//  CreateReview.swift
+//  CreateMovieActor.swift
 //  
 //
 //  Created by Coleton Gorecke on 5/8/23.
@@ -8,28 +8,33 @@
 import Foundation
 import Fluent
 import FluentPostgresDriver
-import Vapor
 
-struct CreateReview: AsyncMigration {
+struct CreateMovieActor: AsyncMigration {
     
     // The up migration, creating a table.
     func prepare(on database: Database) async throws {
-        try await database.schema(Review.schema)
+        try await database
+            .schema(MovieActor.schema)
             .id()
-            .field("title", .string)
-            .field("body", .string)
             .field(
                 "movie_id",
                 .uuid,
-                .references(Movie.schema, .id)
-            )
+                .required,
+                .references(Movie.schema, .id))
+            .field(
+                "actor_id",
+                .uuid,
+                .required,
+                .references(Actor.schema, .id))
             .create()
     }
     
     // Performed at the end of the migration, undo
     func revert(on database: Database) async throws {
         // Drop the table
-        try await database.schema(Review.schema).delete()
+        try await database
+            .schema(MovieActor.schema)
+            .delete()
     }
-    
 }
+

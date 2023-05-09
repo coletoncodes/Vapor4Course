@@ -17,6 +17,8 @@ public func configure(_ app: Application) async throws {
     
     app.migrations.add(CreateMovie(), to: .psql)
     app.migrations.add(CreateReview(), to: .psql)
+    app.migrations.add(CreateActor(), to: .psql)
+    app.migrations.add(CreateMovieActor(), to: .psql)
     
     // register routes
     try routes(app)
