@@ -28,3 +28,10 @@ final class Movie: Model, Content {
     }
 }
 
+// MARK: - Equatable Conformance
+extension Movie: Equatable {
+    static func == (lhs: Movie, rhs: Movie) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.title == rhs.title
+    }
+}

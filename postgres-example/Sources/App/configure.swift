@@ -16,6 +16,7 @@ public func configure(_ app: Application) async throws {
     )
     
     app.migrations.add(CreateMovie(), to: .psql)
+    app.responder.use(.default)
     
     // register routes
     try routes(app)
