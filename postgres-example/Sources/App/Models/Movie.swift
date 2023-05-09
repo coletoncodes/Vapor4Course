@@ -15,7 +15,7 @@ final class Movie: Model, Content {
     // MARK: - Primary key
     @ID(key: .id)
     var id: UUID?
-
+    
     // MARK: - Properties
     @Field(key: "title")
     var title: String
@@ -23,10 +23,17 @@ final class Movie: Model, Content {
     @Children(for: \.$movie)
     var reviews: [Review]
     
+    @Siblings(
+        through: MovieActor.self,
+        from: \.$movie,
+        to: \.$actor
+    )
+    var actors: [Actor]
+    
     // MARK: - Initializers
     
     init() { }
-
+    
     init(
         id: UUID? = nil,
         title: String

@@ -68,5 +68,13 @@ func routes(_ app: Application) throws {
         req.logger.info("Successfully added review to movie")
         return .ok
     }
-
+    
+    // MARK: - Actors
+    // /actors
+    app.post("actors") { req async throws -> HTTPStatus in
+        let actor = try req.content.decode(Actor.self)
+        try await actor.create(on: req.db)
+        req.logger.info("Successfully created actor")
+        return .ok
+    }
 }

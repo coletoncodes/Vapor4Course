@@ -20,6 +20,14 @@ final class Actor: Model, Content {
     @Field(key: "name")
     var name: String
     
+    // Many To Many.
+    @Siblings(
+        through: MovieActor.self,
+        from: \.$actor,
+        to: \.$movie
+    )
+    var movies: [Movie]
+    
     // MARK: - Initializers
     
     init() { }
