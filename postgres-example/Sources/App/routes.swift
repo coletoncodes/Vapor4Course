@@ -7,7 +7,9 @@ func routes(_ app: Application) throws {
     // /movies
     app.get("movies") { req async throws -> [Movie] in
         try await Movie.query(on: req.db)
-            .with(\.$reviews).all()
+            .with(\.$reviews)
+            .with(\.$actors)
+            .all()
     }
     
     // /movie/id
@@ -81,7 +83,9 @@ func routes(_ app: Application) throws {
     /// GET
     // /actors
     app.get("actors") { req async throws -> [Actor] in
-        try await Actor.query(on: req.db)
+        try await Actor
+            .query(on: req.db)
+            .with(\.$movies)
             .all()
     }
     

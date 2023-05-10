@@ -9,9 +9,9 @@ public func configure(_ app: Application) async throws {
     app.databases.use(
         .postgres(
             hostname: "localhost",
-            username: "coletongorecke",
+            username: "cgorecke",
             password: "",
-            database: "postgres"
+            database: "moviesdb"
         ),
         as: .psql
     )
