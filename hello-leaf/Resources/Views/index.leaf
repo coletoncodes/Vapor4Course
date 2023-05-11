@@ -1,12 +1,8 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-            
-            <title>Hello #(name)</title>
-    </head>
-    
-    <body>
-        <h1>Hello #(name)</h1>
-    </body>
-</html>
+#extend("base"):
+    #export("title"): Index Page #endexport
+    #export("body"):
+
+    <h1>Hello There, this is the body of the content</h1>
+
+#endexport
+#endextend

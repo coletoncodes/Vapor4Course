@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+            
+            <title>#import("title")</title>
+    </head>
+    
+    <body>
+        <h1>Header</h1>
+        
+        #import("body")
+        
+        <h2>Footer</h2>
+    </body>
+</html>

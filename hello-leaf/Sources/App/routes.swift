@@ -8,11 +8,11 @@ func routes(_ app: Application) throws {
     
     // Root Route
     app.get { req async throws -> View in
-        try await req.view.render("index", Context(name: "John Doe"))
+        try await req.view.render("index")
     }
     
-    // /app
-    app.get("app") { req async throws -> View in
-        try await req.view.render("app")
-    }
+//    // /app
+//    app.get("app") { req async throws -> View in
+//        try await req.view.render("app")
+//    }
 }
