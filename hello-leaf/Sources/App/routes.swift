@@ -1,6 +1,6 @@
 import Vapor
 
-struct Context: Content {
+struct Movie: Content {
     let name: String
 }
 
@@ -11,8 +11,13 @@ func routes(_ app: Application) throws {
         try await req.view.render("index")
     }
     
-//    // /app
-//    app.get("app") { req async throws -> View in
-//        try await req.view.render("app")
-//    }
+    // /add-movie
+    app.post("add-movie") { req async throws -> Response in
+        let movie = try req.content.decode(Movie.self)
+        
+        // save to database
+        print(movie)
+        // redirect to root
+        return req.redirect(to: "/")
+    }
 }
