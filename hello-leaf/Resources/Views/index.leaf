@@ -3,10 +3,10 @@
     <head>
         <meta charset="utf-8">
             
-            <title>Hello Leaf</title>
+            <title>Hello #(name)</title>
     </head>
     
     <body>
-        <h1>Hello Leaf</h1>
+        <h1>Hello #(name)</h1>
     </body>
 </html>
