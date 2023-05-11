@@ -1,11 +1,14 @@
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async throws in
-        try await req.view.render("index", ["title": "Hello Vapor!"])
+    
+    // Root Route
+    app.get { req async throws -> View in
+        try await req.view.render("index")
     }
-
-    app.get("hello") { req async -> String in
-        "Hello, world!"
+    
+    // /app
+    app.get("app") { req async throws -> View in
+        try await req.view.render("app")
     }
 }
